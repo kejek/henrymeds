@@ -63,6 +63,7 @@ If you wish to run with Herd, you can install it from [Here](https://herd.larave
 ## Retrieve Provider Schedules
 
 1. You can use a get request to the route: `http://henrymeds.test/api/schedules/{provider_id}` to get the schedules available for that provider.
+<img width="1324" alt="Screenshot 2023-12-14 at 2 19 53 PM" src="https://github.com/kejek/henrymeds/assets/3529051/aa47a69b-7150-447f-adcd-afa715448bb7">
 
 ## Creating a Reservation
 
