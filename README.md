@@ -76,6 +76,8 @@ If you wish to run with Herd, you can install it from [Here](https://herd.larave
 ## Retrieve all Reservations for a provider
 
 1. Was not able to get to this - I thought I did and spaced it. Yikes!
+2. There is a list of available schedules that have not been filled by going to `http://henrymeds.test/api/reservations/available/{provider_id}` however.
+<img width="1297" alt="Screenshot 2023-12-14 at 2 23 14 PM" src="https://github.com/kejek/henrymeds/assets/3529051/cd688018-435b-4f17-a012-46ff9f75f351">
 
 ## Logging out
 
