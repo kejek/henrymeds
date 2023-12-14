@@ -75,8 +75,7 @@ If you wish to run with Herd, you can install it from [Here](https://herd.larave
 
 ## Retrieve all Reservations for a provider
 
-1. You can send a get request to `http://henrymeds.test/api/reservations/available/{provider_id}` to retrieve a list of all reservation slots that have been requested.
-2. This does not filter by confirmed/unconfirmed, see the Things I was not able to get to.
+1. Was not able to get to this - I thought I did and spaced it. Yikes!
 
 ## Logging out
 
