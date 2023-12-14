@@ -2,12 +2,13 @@
 
 1. Make sure you have composer installed. [Get Composer](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-macos)
 2. Clone this repository.
-3. Copy `.env.testing` and rename it to `.env`.
+3. Copy `.env.example` and rename it to `.env`.
 4. Change the DB\_ entries in the `.env` file to point to your database name with the correct Username and Password.
 5. Run `composer install`.
-6. Run `php artisan migrate`.
-7. Run `npm i && npm run build`.
-8. If you wish to use herd, check out Setup Herd below, otherwise you can use `php artisan serve`.
+6. Run `php artisan key:generate`.
+7. Run `php artisan migrate`.
+8. Run `npm i && npm run build`.
+9. If you wish to use herd, check out Setup Herd below, otherwise you can use `php artisan serve`.
 
 ## Setup Herd
 
@@ -17,44 +18,46 @@ If you wish to run with Herd, you can install it from [Here](https://herd.larave
 2. Under General, Herd Paths, add the path to the application directory.
 3. The website should now be available under Sites as `http://henrymeds.test`.
 
+## Note: Replace All routes with `http://127.0.0.1:8000` if you did not use Herd
+
 ## Creating a Client
 
 1. You can make a post to the route: `http://henrymeds.test/api/auth/register` with the following in the body:
-    1. name
-    2. email
-    3. password
-    4. c_password
-    5. client (true)
+    - name
+    - email
+    - password
+    - c_password
+    - client (true)
 2. This should return a success message and an accessToken
 
 ## Creating a Provider
 
 1. You can make a post to the route: `http://henrymeds.test/api/auth/register` with the following in the body:
-    1. name
-    2. email
-    3. password
-    4. c_password
-    5. provider (true)
+    - name
+    - email
+    - password
+    - c_password
+    - provider (true)
 2. This should return a success message and an accessToken
 
 ## Authentication
 
 1. For the below routes, the header needs to be set:
-    1. Accept: application/json
-    2. Authorization: Bearer `AccessToken`
+    - Accept: application/json
+    - Authorization: Bearer `AccessToken`
 
 ## Creating a Schedule
 
 1. As a provider, you can post to the route: `http://henrymeds.test/api/provider/schedule/add` with the following body:
-    1. start_time (format: yyy-dd-mm hh:ii:ss)
-    2. end_time (format: yyy-dd-mm hh:ii:ss)
+    - start_time (format: yyy-dd-mm hh:ii:ss)
+    - end_time (format: yyy-dd-mm hh:ii:ss)
 2. This should return a success message with the time block for schedule.
 3. You should not be able to add overlapping schedules (ie: one from 12pm to 2pm, and another from 1pm to 3pm on the same day).
 
 ## Creating a Reservation
 
 1. As a client, you can post to the route: `http://henrymeds.test/api/reservations/add/{provider_id}` with the following body:
-    1. time (format: yyy-dd-mm hh:ii:ss)
+    - time (format: yyy-dd-mm hh:ii:ss)
 2. This should return a success with the reservation slot. Confirmed is false by default.
 3. You should not be able to create another reservation as a different client or same client on the same provider for the same slot.
 
