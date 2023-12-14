@@ -54,12 +54,21 @@ If you wish to run with Herd, you can install it from [Here](https://herd.larave
 2. This should return a success message with the time block for schedule.
 3. You should not be able to add overlapping schedules (ie: one from 12pm to 2pm, and another from 1pm to 3pm on the same day).
 
+## Retrieve Provider Schedules
+
+1. You can use a get request to the route: `http://henrymeds.test/api/schedules/{provider_id}` to get the schedules available for that provider.
+
 ## Creating a Reservation
 
 1. As a client, you can post to the route: `http://henrymeds.test/api/reservations/add/{provider_id}` with the following body:
     - time (format: yyy-dd-mm hh:ii:ss)
 2. This should return a success with the reservation slot. Confirmed is false by default.
 3. You should not be able to create another reservation as a different client or same client on the same provider for the same slot.
+
+## Retrieve all Reservations for a provider
+
+1. You can send a get request to `http://henrymeds.test/api/reservations/available/{provider_id}` to retrieve a list of all reservation slots that have been requested.
+2. This does not filter by confirmed/unconfirmed, see the Things I was not able to get to.
 
 ## Logging out
 
@@ -75,4 +84,6 @@ If you wish to run with Herd, you can install it from [Here](https://herd.larave
 5. There is no check on 24 hour advanced notice. I needed to think a little on how to add this, and just hit the 2 hour mark.
 6. Reservations do not expire. I would have created a check on the current time vs when the reservation was created, and removed that reservation if it was not confirmed, and allowed a client to create a new reservation at that time.
 7. Time Zones - i would have probably had something along the line of a time zone for the client/provider. For now, everything is assumed to be UTC, which in the real world isn't the greatest, but saving them as UTC is probably ok (as long as i know the provider/client timezone). Timezones are super fun right? hah
-8.
+8. I believe that you can also create a reservation at the last available hour (ie, if the schedule range is from 1pm to 5pm, the client could request an appointment at 5pm). I would definitely not allow this!
+9. I did not specifically give response codes to all response errors. While the error message should be correct, the response code is probably not. Quick change but, in the fairness of the 2 hour limit, it was left out for now.
+10. Reservation lists does not filter confirmed/unconfirmed, as I didn't get to implement that fully. It just returns all reservations that have been requested for that provider.
