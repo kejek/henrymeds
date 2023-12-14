@@ -30,6 +30,7 @@ If you wish to run with Herd, you can install it from [Here](https://herd.larave
     - c_password
     - client (true)
 2. This should return a success message and an accessToken
+<img width="1287" alt="Screenshot 2023-12-14 at 12 58 30 PM" src="https://github.com/kejek/henrymeds/assets/3529051/f81f1ecb-c996-4f02-917c-4b24851e63f6">
 
 ## Creating a Provider
 
@@ -40,12 +41,14 @@ If you wish to run with Herd, you can install it from [Here](https://herd.larave
     - c_password
     - provider (true)
 2. This should return a success message and an accessToken
+<img width="1325" alt="Screenshot 2023-12-14 at 12 58 02 PM" src="https://github.com/kejek/henrymeds/assets/3529051/0b0e88ae-6f49-4e2c-bbd7-e74f360d15e6">
 
 ## Authentication
 
 1. For the below routes, the header needs to be set:
     - Accept: application/json
     - Authorization: Bearer `AccessToken`
+<img width="1294" alt="Screenshot 2023-12-14 at 12 58 52 PM" src="https://github.com/kejek/henrymeds/assets/3529051/a4fa941a-0755-4ba9-84d8-3a168508fe1d">
 
 ## Creating a Schedule
 
@@ -54,6 +57,8 @@ If you wish to run with Herd, you can install it from [Here](https://herd.larave
     - end_time (format: yyy-dd-mm hh:ii:ss)
 2. This should return a success message with the time block for schedule.
 3. You should not be able to add overlapping schedules (ie: one from 12pm to 2pm, and another from 1pm to 3pm on the same day).
+<img width="1309" alt="Screenshot 2023-12-14 at 1 16 56 PM" src="https://github.com/kejek/henrymeds/assets/3529051/61ff935e-9c45-46f5-856f-20b550f1b549">
+<img width="1298" alt="Screenshot 2023-12-14 at 1 23 36 PM" src="https://github.com/kejek/henrymeds/assets/3529051/6ac29142-85e8-4e01-95a6-042f500852a7">
 
 ## Retrieve Provider Schedules
 
@@ -65,6 +70,7 @@ If you wish to run with Herd, you can install it from [Here](https://herd.larave
     - time (format: yyy-dd-mm hh:ii:ss)
 2. This should return a success with the reservation slot. Confirmed is false by default.
 3. You should not be able to create another reservation as a different client or same client on the same provider for the same slot.
+<img width="1313" alt="Screenshot 2023-12-14 at 1 48 20 PM" src="https://github.com/kejek/henrymeds/assets/3529051/d133bdba-871e-45f2-b06b-1b1d11c0bef6">
 
 ## Retrieve all Reservations for a provider
 
@@ -75,6 +81,7 @@ If you wish to run with Herd, you can install it from [Here](https://herd.larave
 
 1. Create a get request to `http://henrymeds.test/api/auth/logout`.
 2. You should get a successfully logged out message.
+<img width="1293" alt="Screenshot 2023-12-14 at 1 01 49 PM" src="https://github.com/kejek/henrymeds/assets/3529051/49337951-a89e-4de9-be9a-d9c5f516a00c">
 
 ## Things I was not able to get to
 
