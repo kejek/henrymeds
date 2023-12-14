@@ -1,66 +1,75 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## Setup
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+1. Make sure you have composer installed. [Get Composer](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-macos)
+2. Clone this repository.
+3. Copy `.env.testing` and rename it to `.env`.
+4. Change the DB\_ entries in the `.env` file to point to your database name with the correct Username and Password.
+5. Run `composer install`.
+6. Run `php artisan migrate`.
+7. Run `npm i && npm run build`.
+8. If you wish to use herd, check out Setup Herd below, otherwise you can use `php artisan serve`.
 
-## About Laravel
+## Setup Herd
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+If you wish to run with Herd, you can install it from [Here](https://herd.laravel.com/). Once you have installed Herd, you can easily add the application to Herd.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+1. Open up the Herd Settings.
+2. Under General, Herd Paths, add the path to the application directory.
+3. The website should now be available under Sites as `http://henrymeds.test`.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Creating a Client
 
-## Learning Laravel
+1. You can make a post to the route: `http://henrymeds.test/api/auth/register` with the following in the body:
+    1. name
+    2. email
+    3. password
+    4. c_password
+    5. client (true)
+2. This should return a success message and an accessToken
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Creating a Provider
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+1. You can make a post to the route: `http://henrymeds.test/api/auth/register` with the following in the body:
+    1. name
+    2. email
+    3. password
+    4. c_password
+    5. provider (true)
+2. This should return a success message and an accessToken
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Authentication
 
-## Laravel Sponsors
+1. For the below routes, the header needs to be set:
+    1. Accept: application/json
+    2. Authorization: Bearer `AccessToken`
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Creating a Schedule
 
-### Premium Partners
+1. As a provider, you can post to the route: `http://henrymeds.test/api/provider/schedule/add` with the following body:
+    1. start_time (format: yyy-dd-mm hh:ii:ss)
+    2. end_time (format: yyy-dd-mm hh:ii:ss)
+2. This should return a success message with the time block for schedule.
+3. You should not be able to add overlapping schedules (ie: one from 12pm to 2pm, and another from 1pm to 3pm on the same day).
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## Creating a Reservation
 
-## Contributing
+1. As a client, you can post to the route: `http://henrymeds.test/api/reservations/add/{provider_id}` with the following body:
+    1. time (format: yyy-dd-mm hh:ii:ss)
+2. This should return a success with the reservation slot. Confirmed is false by default.
+3. You should not be able to create another reservation as a different client or same client on the same provider for the same slot.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Logging out
 
-## Code of Conduct
+1. Create a get request to `http://henrymeds.test/api/auth/logout`.
+2. You should get a successfully logged out message.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Things I was not able to get to
 
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+1. I was not able to make sure that all reservations are within 15 minute increments (ie, 12:00, 12:15, 12:30, etc). Right now it allows for any time (12:01, 12:10, etc). I would definitely not allow that and make sure the client gave 15 minute increments.
+2. The schedule (appointment ranges) just come back as a range between the providers start and end. I would have broken this up into the 15 minute slots that a client can see.
+3. There is no confirmation endpoint, this was something I wanted to add but to be legitimate with the 2 hour window I stopped and started updating this readme at the 2 hour mark.
+4. Tests. LOTS OF TESTING. I did not add any tests, as I just wanted to get the functionality in.
+5. There is no check on 24 hour advanced notice. I needed to think a little on how to add this, and just hit the 2 hour mark.
+6. Reservations do not expire. I would have created a check on the current time vs when the reservation was created, and removed that reservation if it was not confirmed, and allowed a client to create a new reservation at that time.
+7. Time Zones - i would have probably had something along the line of a time zone for the client/provider. For now, everything is assumed to be UTC, which in the real world isn't the greatest, but saving them as UTC is probably ok (as long as i know the provider/client timezone). Timezones are super fun right? hah
+8.
