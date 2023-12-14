@@ -1,14 +1,15 @@
 ## Setup
 
 1. Make sure you have composer installed. [Get Composer](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-macos)
-2. Clone this repository.
-3. Copy `.env.example` and rename it to `.env`.
-4. Change the DB\_ entries in the `.env` file to point to your database name with the correct Username and Password.
-5. Run `composer install`.
-6. Run `php artisan key:generate`.
-7. Run `php artisan migrate`.
-8. Run `npm i && npm run build`.
-9. If you wish to use herd, check out Setup Herd below, otherwise you can use `php artisan serve`.
+2. Set up a database for this - I used MySQL here, but you can use PostgreSQL as well. I believe the DB_CONNECTION value would be pgsql and port 5432
+3. Clone this repository.
+4. Copy `.env.example` and rename it to `.env`.
+5. Change the DB\_ entries in the `.env` file to point to your database name with the correct Username and Password.
+6. Run `composer install`.
+7. Run `php artisan key:generate`.
+8. Run `php artisan migrate`.
+9. Run `npm i && npm run build`.
+10. If you wish to use herd, check out Setup Herd below, otherwise you can use `php artisan serve`.
 
 ## Setup Herd
 
