@@ -27,17 +27,13 @@ Route::group(['prefix' => 'auth'], function () {
     });
 });
 
-
-//Public Schedule Routes to see what is available
-Route::get('/schedules/{id}', [ScheduleController::class, 'index']);
-
 //Private Schedule Routes to add/update schedule
 Route::middleware('auth:sanctum')->group(function(){
     //schedules
     Route::get('/schedules/{id}', [ScheduleController::class, 'index']);
-    Route::post('/provider/schedule/add', [ScheduleController::class, 'addSchedule']);
+    Route::post('/schedules/{id}', [ScheduleController::class, 'addSchedule']);
 
     //reservations
-    Route::get('/reservations/available/{id}', [ReservationController::class, 'index']);
-    Route::post('/reservations/add/{id}', [ReservationController::class, 'addReservation']);
+    Route::get('/reservations/{id}', [ReservationController::class, 'index']);
+    Route::post('/reservations/{id}', [ReservationController::class, 'addReservation']);
 });
