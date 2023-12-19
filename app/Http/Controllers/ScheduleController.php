@@ -32,7 +32,7 @@ class ScheduleController extends Controller
 
             foreach ($period as $date) {
                 $slot = $date->format('Y-m-d h:i A');
-                $busy = Reservation::where('reservation_slot', Carbon::parse($date)->setTimezone('UTC'))->where('provider_id', $id)->get();
+                $busy = Reservation::where('reservation_slot', Carbon::parse($date)->timezone(Auth::user()->timezone)->setTimezone('UTC'))->where('provider_id', $id)->get();
 
                 if (! $busy->isEmpty()) {
                     continue;
@@ -72,8 +72,8 @@ class ScheduleController extends Controller
 
         $schedule = new Schedule([
             'provider_id' => $user->provider->id,
-            'start_time' => Carbon::parse($start_time)->setTimezone('UTC'),
-            'end_time' => Carbon::parse($end_time)->setTimezone('UTC'),
+            'start_time' => Carbon::parse($start_time)->timezone(Auth::user()->timezone)->setTimezone('UTC'),
+            'end_time' => Carbon::parse($end_time)->timezone(Auth::user()->timezone)->setTimezone('UTC'),
         ]);
 
         $schedule->save();
@@ -81,7 +81,7 @@ class ScheduleController extends Controller
         return response()->json($schedule);
     }
 
-    public function update(Request $request, int $id)
+    public function update(Request $request, int $id): JsonResponse
     {
         $request->validate([
             'start_time' => 'required|string|before:end_time',
@@ -100,15 +100,15 @@ class ScheduleController extends Controller
             return response()->json(['error' => 'Schedule not found.'], 404);
         }
 
-        $schedule->start_time = Carbon::parse($request->input('start_time'))->setTimezone('UTC');
-        $schedule->end_time = Carbon::parse($request->input('end_time'))->setTimezone('UTC');
+        $schedule->start_time = Carbon::parse($request->input('start_time'))->timezone(Auth::user()->timezone)->setTimezone('UTC');
+        $schedule->end_time = Carbon::parse($request->input('end_time'))->timezone(Auth::user()->timezone)->setTimezone('UTC');
 
         $schedule->save();
 
         return response()->json(['message' => 'success']);
     }
 
-    public function destroy(int $id)
+    public function destroy(int $id): JsonResponse
     {
         $user = User::where('id', Auth::user()->id)->first();
 

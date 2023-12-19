@@ -44,7 +44,13 @@ class ReservationController extends Controller
             return response()->json(['error' => 'Not Authorized'], 403);
         }
 
-        $slot = Carbon::parse($request->slot)->setTimezone('UTC');
+        $slot = Carbon::parse($request->slot)->timezone($user->timezone)->setTimezone('UTC');
+
+        $latestTimeToReserve = $slot->subDay();
+
+        if ($latestTimeToReserve > Carbon::now()) {
+            return response()->json(['error' => 'Must reserve a slot 24 hours in advance'], 409);
+        }
 
         $available = Schedule::where([
             ['provider_id', $id],
@@ -57,7 +63,7 @@ class ReservationController extends Controller
             return response()->json(['error' => 'Time slot not available for this provider'], 404);
         }
 
-        $reservationExists = Reservation::where('reservation_slot', $slot)->first();
+        $reservationExists = Reservation::where('reservation_slot', $slot)->where('created_at', '<=', Carbon::now()->subMinutes(30))->first();
 
         if ($reservationExists) {
             return response()->json(['error' => 'Reservation slot already taken'], 409);
@@ -74,10 +80,11 @@ class ReservationController extends Controller
         return response()->json($reservation);
     }
 
-    public function update(Request $request, int $id)
+    public function update(Request $request, int $id): JsonResponse
     {
         $request->validate([
             'time' => 'required|string',
+            'confirm' => 'nullable|boolean',
         ]);
 
         $reservation = Reservation::where('id', $id)->first();
@@ -86,14 +93,25 @@ class ReservationController extends Controller
             return response()->json(['error' => 'Not Found'], 404);
         }
 
-        $reservation->reservation_slot = Carbon::parse($request->time)->setTimezone('UTC');
+        if ($reservation->created_at <= Carbon::now()->subMinutes(30) && !$reservation->confirmed) {
+            //Reservation too old. Delete and say not found.
+            $reservation->delete();
+
+            return response()->json(['error' => 'Not Found'], 404);
+        }
+
+        $reservation->reservation_slot = Carbon::parse($request->slot)->timezone(Auth::user()->timezone)->setTimezone('UTC');
+
+        if ($request->has('confirm') && !$reservation->confirmed ) {
+            $reservation->confirmed = true;
+        }
 
         $reservation->save();
 
         return response()->json(['message' => 'success']);
     }
 
-    public function destroy(int $id)
+    public function destroy(int $id): JsonResponse
     {
         $user = User::where('id', Auth::user()->id)->first();
 
