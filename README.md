@@ -50,7 +50,7 @@ If you wish to run with Herd, you can install it from [Here](https://herd.larave
 
 ## Creating a Schedule
 
-1. As a provider, you can post to the route: `http://henrymeds.test/api/provider/schedule/add` with the following body:
+1. As a provider, you can post to the route: `http://henrymeds.test/api/schedules` with the following body:
     - start_time (format: yyy-dd-mm hh:ii:ss)
     - end_time (format: yyy-dd-mm hh:ii:ss)
 2. This should return a success message with the time block for schedule.
@@ -63,9 +63,17 @@ If you wish to run with Herd, you can install it from [Here](https://herd.larave
 1. You can use a get request to the route: `http://henrymeds.test/api/schedules/{provider_id}` to get the schedules available for that provider.
    <img width="1324" alt="Screenshot 2023-12-14 at 2 19 53 PM" src="https://github.com/kejek/henrymeds/assets/3529051/aa47a69b-7150-447f-adcd-afa715448bb7">
 
+## Updating Schedules
+
+1. Just like creating a schedule, you can use a put request to the route: `http://henrymeds.test/api/schedules/{provider_id}/{schedule_id}` to update the schedule of that provider.
+
+## Deleting Schedules
+
+1. Just like creating, you can use a delete request to the route: `http://henrymeds.test/api/schedules/{provider_id}/{schedule_id}` to delete the schedule.
+
 ## Creating a Reservation
 
-1. As a client, you can post to the route: `http://henrymeds.test/api/reservations/add/{provider_id}` with the following body:
+1. As a client, you can post to the route: `http://henrymeds.test/api/reservations/{provider_id}` with the following body:
     - time (format: yyy-dd-mm hh:ii:ss)
 2. This should return a success with the reservation slot. Confirmed is false by default.
 3. You should not be able to create another reservation as a different client or same client on the same provider for the same slot.
@@ -73,9 +81,17 @@ If you wish to run with Herd, you can install it from [Here](https://herd.larave
 
 ## Retrieve all Reservations for a provider
 
-1. Was not able to get to this - I thought I did and spaced it. Yikes!
-2. There is a list of available schedules that have not been filled by going to `http://henrymeds.test/api/reservations/available/{provider_id}` however.
+1. There is a list of available schedules that have not been filled by a get request to `http://henrymeds.test/api/reservations/{provider_id}` however.
    <img width="1297" alt="Screenshot 2023-12-14 at 2 23 14 PM" src="https://github.com/kejek/henrymeds/assets/3529051/cd688018-435b-4f17-a012-46ff9f75f351">
+2. No current endpoint for all reserved slots for a provider yet.
+
+## Updating a reservation
+
+1. Use a put request to the route `http://henrymeds.test/api/reservations/{provider_id}/{reservation_id}` to update a reservation.
+
+## Deleting a reservation
+
+1. use a delete request to the route `http://henrymeds.test/api/reservations/{provider_id}/{reservation_id}` to delete the reservation
 
 ## Logging out
 

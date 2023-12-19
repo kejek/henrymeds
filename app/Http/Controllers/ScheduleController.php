@@ -19,9 +19,9 @@ class ScheduleController extends Controller
         return Schedule::all();
     }
 
-    public function show(int $id): Collection
+    public function show(int $providerId): Collection
     {
-        $schedules = Schedule::where('provider_id', $id)->get();
+        $schedules = Schedule::where('provider_id', $providerId)->get();
 
         $timeSlots = new Collection();
 
@@ -46,7 +46,7 @@ class ScheduleController extends Controller
         return $timeSlots;
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(Request $request, int $providerId): JsonResponse
     {
         $request->validate([
             'start_time' => 'required|string|before:end_time',
@@ -71,7 +71,7 @@ class ScheduleController extends Controller
         }
 
         $schedule = new Schedule([
-            'provider_id' => $user->provider->id,
+            'provider_id' => $providerId,
             'start_time' => Carbon::parse($start_time)->timezone(Auth::user()->timezone)->setTimezone('UTC'),
             'end_time' => Carbon::parse($end_time)->timezone(Auth::user()->timezone)->setTimezone('UTC'),
         ]);
@@ -81,7 +81,7 @@ class ScheduleController extends Controller
         return response()->json($schedule);
     }
 
-    public function update(Request $request, int $id): JsonResponse
+    public function update(Request $request, int $providerId, int $scheduleId): JsonResponse
     {
         $request->validate([
             'start_time' => 'required|string|before:end_time',
@@ -94,7 +94,7 @@ class ScheduleController extends Controller
             return response()->json(['error' => 'Not Authorized'], 403);
         }
 
-        $schedule = Schedule::where('id', $id)->first();
+        $schedule = Schedule::where('id', $scheduleId)->first();
 
         if (! $schedule) {
             return response()->json(['error' => 'Schedule not found.'], 404);
@@ -108,7 +108,7 @@ class ScheduleController extends Controller
         return response()->json(['message' => 'success']);
     }
 
-    public function destroy(int $id): JsonResponse
+    public function destroy(int $providerId, int $scheduleId): JsonResponse
     {
         $user = User::where('id', Auth::user()->id)->first();
 
@@ -116,7 +116,7 @@ class ScheduleController extends Controller
             return response()->json(['error' => 'Not Authorized'], 403);
         }
 
-        $schedule = Schedule::where('id', $id)->where('client_id', $user->provider->id)->first();
+        $schedule = Schedule::where('id', $scheduleId)->where('client_id', $user->provider->id)->first();
 
         if (! $schedule) {
             return response()->json(['error' => 'Not Found'], 404);

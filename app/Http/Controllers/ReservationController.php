@@ -84,14 +84,14 @@ class ReservationController extends Controller
         return response()->json($reservation);
     }
 
-    public function update(Request $request, int $id): JsonResponse
+    public function update(Request $request, int $providerId, int $reservationId): JsonResponse
     {
         $request->validate([
             'time' => 'required|string',
             'confirm' => 'nullable|boolean',
         ]);
 
-        $reservation = Reservation::where('id', $id)->first();
+        $reservation = Reservation::where('id', $reservationId)->first();
 
         if (! $reservation) {
             return response()->json(['error' => 'Not Found'], 404);
@@ -115,7 +115,7 @@ class ReservationController extends Controller
         return response()->json(['message' => 'success']);
     }
 
-    public function destroy(int $id): JsonResponse
+    public function destroy(int $providerId, int $reservationId): JsonResponse
     {
         $user = User::where('id', Auth::user()->id)->first();
 
@@ -123,7 +123,7 @@ class ReservationController extends Controller
             return response()->json(['error' => 'Not Authorized'], 403);
         }
 
-        $reservation = Reservation::where('id', $id)->where('client_id', $user->client->id)->first();
+        $reservation = Reservation::where('id', $reservationId)->where('client_id', $user->client->id)->first();
 
         if (! $reservation) {
             return response()->json(['error' => 'Not Found'], 404);
