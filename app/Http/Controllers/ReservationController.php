@@ -54,13 +54,13 @@ class ReservationController extends Controller
             ->get();
 
         if ($available->isEmpty()) {
-            return response()->json(['error' => 'This time slot is not available!'], 404);
+            return response()->json(['error' => 'Time slot not available for this provider'], 404);
         }
 
         $reservationExists = Reservation::where('reservation_slot', $slot)->first();
 
         if ($reservationExists) {
-            return response()->json(['error' => 'Reservation slot already exists!'], 409);
+            return response()->json(['error' => 'Reservation slot already taken'], 409);
         }
 
         $reservation = new Reservation([
