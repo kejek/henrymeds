@@ -20,7 +20,7 @@ class ReservationController extends Controller
         return $schedules;
     }
 
-    public function update(Request $request, int $id): JsonResponse
+    public function store(Request $request, int $id): JsonResponse
     {
         $request->validate([
             'time' => 'required|string',

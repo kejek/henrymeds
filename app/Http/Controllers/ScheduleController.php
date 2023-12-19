@@ -21,7 +21,7 @@ class ScheduleController extends Controller
         return $schedules;
     }
 
-    public function update(Request $request): JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $request->validate([
             'start_time' => 'required|string|before:end_time',

@@ -31,9 +31,9 @@ Route::group(['prefix' => 'auth'], function () {
 Route::middleware('auth:sanctum')->group(function(){
     //schedules
     Route::get('/schedules/{id}', [ScheduleController::class, 'show']);
-    Route::post('/schedules/{id}', [ScheduleController::class, 'update']);
+    Route::post('/schedules/{id}', [ScheduleController::class, 'store']);
 
     //reservations
     Route::get('/reservations/{id}', [ReservationController::class, 'show']);
-    Route::post('/reservations/{id}', [ReservationController::class, 'update']);
+    Route::post('/reservations/{id}', [ReservationController::class, 'store']);
 });
