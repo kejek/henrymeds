@@ -69,6 +69,10 @@ class ReservationController extends Controller
             return response()->json(['error' => 'Reservation slot already taken'], 409);
         }
 
+        if ($slot === $available->end_time) {
+            return response()->json(['error' => 'Time slot not available for this provider'], 404);  
+        }
+
         $reservation = new Reservation([
             'provider_id' => $id,
             'client_id' => $user->client()->first()->id,
