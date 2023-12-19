@@ -27,11 +27,11 @@ class Schedule extends Model
         return $this->hasOne(Provider::class);
     }
 
-    public function scopeByBusy($query,$start_time,$end_time) 
-    { 
-        return $query->whereBetween('start_time', [$start_time, $end_time]) 
-            ->orWhereBetween('end_time', [$start_time, $end_time]) 
-            ->orWhereRaw('? BETWEEN start_time and end_time', [$start_time]) 
-            ->orWhereRaw('? BETWEEN start_time and end_time', [$end_time]); 
+    public function scopeByBusy($query, $start_time, $end_time)
+    {
+        return $query->whereBetween('start_time', [$start_time, $end_time])
+            ->orWhereBetween('end_time', [$start_time, $end_time])
+            ->orWhereRaw('? BETWEEN start_time and end_time', [$start_time])
+            ->orWhereRaw('? BETWEEN start_time and end_time', [$end_time]);
     }
 }

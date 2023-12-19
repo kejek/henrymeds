@@ -9,9 +9,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-use function PHPUnit\Framework\isEmpty;
-use function PHPUnit\Framework\isNan;
-
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -50,7 +47,7 @@ class User extends Authenticatable
     public function isClient(): bool
     {
         $client = $this->client()->get();
-        if ($client->isEmpty()){
+        if ($client->isEmpty()) {
             return false;
         }
 
@@ -61,9 +58,10 @@ class User extends Authenticatable
     {
         $provider = $this->provider()->get();
 
-        if ($provider->isEmpty()){
+        if ($provider->isEmpty()) {
             return false;
         }
+
         return true;
     }
 
