@@ -30,10 +30,10 @@ Route::group(['prefix' => 'auth'], function () {
 //Private Schedule Routes to add/update schedule
 Route::middleware('auth:sanctum')->group(function(){
     //schedules
-    Route::get('/schedules/{id}', [ScheduleController::class, 'index']);
-    Route::post('/schedules/{id}', [ScheduleController::class, 'addSchedule']);
+    Route::get('/schedules/{id}', [ScheduleController::class, 'show']);
+    Route::post('/schedules/{id}', [ScheduleController::class, 'update']);
 
     //reservations
-    Route::get('/reservations/{id}', [ReservationController::class, 'index']);
-    Route::post('/reservations/{id}', [ReservationController::class, 'addReservation']);
+    Route::get('/reservations/{id}', [ReservationController::class, 'show']);
+    Route::post('/reservations/{id}', [ReservationController::class, 'update']);
 });

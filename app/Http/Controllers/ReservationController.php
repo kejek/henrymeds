@@ -13,14 +13,14 @@ use Illuminate\Support\Facades\Auth;
 
 class ReservationController extends Controller
 {
-    public function index(int $id): Collection
+    public function show(int $id): Collection
     {
         $schedules = Schedule::where('provider_id', $id)->where('filled', false)->get();
 
         return $schedules;
     }
 
-    public function addReservation(Request $request, int $id): JsonResponse
+    public function update(Request $request, int $id): JsonResponse
     {
         $request->validate([
             'time' => 'required|string',

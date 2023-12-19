@@ -14,14 +14,14 @@ use Illuminate\Support\Facades\Auth;
 class ScheduleController extends Controller
 {
     
-    public function index(int $id): Collection
+    public function show(int $id): Collection
     {
         $schedules = Schedule::where('provider_id', $id)->get();
 
         return $schedules;
     }
 
-    public function addSchedule(Request $request): JsonResponse
+    public function update(Request $request): JsonResponse
     {
         $request->validate([
             'start_time' => 'required|string|before:end_time',
