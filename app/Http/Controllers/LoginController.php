@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class LoginController extends Controller
 {
@@ -64,6 +65,7 @@ class LoginController extends Controller
         ]);
 
         $user = new User([
+            'uuid' => Str::uuid()->toString(),
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
@@ -74,6 +76,7 @@ class LoginController extends Controller
 
                 if ($request->exists('client')) {
                     $client = new Client([
+                        'uuid' => Str::uuid()->toString(),
                         'user_id' => $user->id,
                     ]);
                     $client->save();
@@ -81,6 +84,7 @@ class LoginController extends Controller
 
                 if ($request->exists('provider')) {
                     $provider = new Provider([
+                        'uuid' => Str::uuid()->toString(),
                         'user_id' => $user->id,
                     ]);
                     $provider->save();

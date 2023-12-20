@@ -16,6 +16,7 @@ class Reservation extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'uuid',
         'provider_id',
         'client_id',
         'reservation_slot',

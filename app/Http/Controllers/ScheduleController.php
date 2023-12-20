@@ -12,6 +12,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class ScheduleController extends Controller
 {
@@ -39,7 +40,7 @@ class ScheduleController extends Controller
 
         foreach ($period as $date) {
             $slot = $date->format('Y-m-d h:i A');
-            $busy = Reservation::where('reservation_slot', Carbon::parse($date)->timezone(Auth::user()->timezone)->setTimezone('UTC'))->where('provider_id', $id)->get();
+            $busy = Reservation::where('reservation_slot', Carbon::parse($date)->timezone(Auth::user()->timezone)->setTimezone('UTC'))->where('uuid', $uuid)->get();
 
             if (! $busy->isEmpty()) {
                 continue;
@@ -76,6 +77,7 @@ class ScheduleController extends Controller
         }
 
         $schedule = new Schedule([
+            'uuid' => Str::uuid()->toString(),
             'provider_id' => $user->provider()->first()->id,
             'start_time' => Carbon::parse($start_time)->timezone(Auth::user()->timezone)->setTimezone('UTC'),
             'end_time' => Carbon::parse($end_time)->timezone(Auth::user()->timezone)->setTimezone('UTC'),

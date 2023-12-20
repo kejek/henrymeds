@@ -105,3 +105,9 @@ If you wish to run with Herd, you can install it from [Here](https://herd.larave
 1. Create a get request to `http://henrymeds.test/api/auth/logout`.
 2. You should get a successfully logged out message.
    <img width="1293" alt="Screenshot 2023-12-14 at 1 01 49 PM" src="https://github.com/kejek/henrymeds/assets/3529051/49337951-a89e-4de9-be9a-d9c5f516a00c">
+
+## Notes
+
+1. Still a work in progress. I am using this as a learning experience now to work with times, and being able to modify and update reservations and schedules.
+2. There are bugs, and to be honest, I haven't fully tested every route right now. I am going to go through and make sure things work and fix with tests written.
+3. I understand TDD should have been used here, which would fix the above issue, but the idea at first was to get something going quickly and in a timeframe (2 hours). This meant that tests were probably not going to be ready for this. Now that I do not have a time limit, I have the ability to start filling this out and adding tests.

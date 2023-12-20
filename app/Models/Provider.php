@@ -16,6 +16,7 @@ class Provider extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'uuid',
         'user_id',
     ];
 

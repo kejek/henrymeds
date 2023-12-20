@@ -46,12 +46,19 @@ class User extends Authenticatable
 
     public function isClient(): bool
     {
-        return $this->has('client');
+        if ($this->has('client')->first()){
+            return true;
+        }
+
+        return false;
     }
 
     public function isProvider(): bool
     {
-        return $this->has('provider');
+        if($this->has('provider')->first()) {
+            return true;
+        }
+        return false;
     }
 
     public function provider(): HasOne

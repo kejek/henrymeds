@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class ReservationController extends Controller
 {
@@ -98,6 +99,7 @@ class ReservationController extends Controller
         }
 
         $reservation = new Reservation([
+            'uuid' => Str::uuid()->toString(),
             'provider_id' => $provider->id,
             'client_id' => $user->client()->first()->id,
             'reservation_slot' => $slot,
