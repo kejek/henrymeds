@@ -55,13 +55,10 @@ If you wish to run with Herd, you can install it from [Here](https://herd.larave
     - end_time (format: yyy-dd-mm hh:ii:ss)
 2. This should return a success message with the time block for schedule.
 3. You should not be able to add overlapping schedules (ie: one from 12pm to 2pm, and another from 1pm to 3pm on the same day).
-   <img width="1309" alt="Screenshot 2023-12-14 at 1 16 56 PM" src="https://github.com/kejek/henrymeds/assets/3529051/61ff935e-9c45-46f5-856f-20b550f1b549">
-   <img width="1298" alt="Screenshot 2023-12-14 at 1 23 36 PM" src="https://github.com/kejek/henrymeds/assets/3529051/6ac29142-85e8-4e01-95a6-042f500852a7">
 
 ## Retrieve Provider Schedules
 
 1. You can use a get request to the route: `http://henrymeds.test/api/schedules?provider={uuid}` to get the schedules available for that provider.
-   <img width="1324" alt="Screenshot 2023-12-14 at 2 19 53 PM" src="https://github.com/kejek/henrymeds/assets/3529051/aa47a69b-7150-447f-adcd-afa715448bb7">
 
 ## Updating Schedules
 
@@ -78,12 +75,10 @@ If you wish to run with Herd, you can install it from [Here](https://herd.larave
     - provider (string, uuid)
 2. This should return a success with the reservation slot. Confirmed is false by default.
 3. You should not be able to create another reservation as a different client or same client on the same provider for the same slot.
-   <img width="1313" alt="Screenshot 2023-12-14 at 1 48 20 PM" src="https://github.com/kejek/henrymeds/assets/3529051/d133bdba-871e-45f2-b06b-1b1d11c0bef6">
 
 ## Retrieve all Reservations for a provider
 
 1. There is a list of available schedules that have not been filled by a get request to `http://henrymeds.test/api/reservations?provider={uuid}`.
-   <img width="1297" alt="Screenshot 2023-12-14 at 2 23 14 PM" src="https://github.com/kejek/henrymeds/assets/3529051/cd688018-435b-4f17-a012-46ff9f75f351">
 
 ## Retrieve all Reservations for a Client
 
@@ -104,7 +99,6 @@ If you wish to run with Herd, you can install it from [Here](https://herd.larave
 
 1. Create a get request to `http://henrymeds.test/api/auth/logout`.
 2. You should get a successfully logged out message.
-   <img width="1293" alt="Screenshot 2023-12-14 at 1 01 49 PM" src="https://github.com/kejek/henrymeds/assets/3529051/49337951-a89e-4de9-be9a-d9c5f516a00c">
 
 ## Notes
 
