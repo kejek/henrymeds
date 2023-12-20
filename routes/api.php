@@ -30,15 +30,15 @@ Route::group(['prefix' => 'auth'], function () {
 Route::middleware('auth:sanctum')->group(function () {
     //schedules
     Route::get('/schedules', [ScheduleController::class, 'index']);
-    Route::get('/schedules/{providerId}', [ScheduleController::class, 'show']);
-    Route::post('/schedules/{providerId}', [ScheduleController::class, 'store']);
-    Route::put('/schedules/{providerId}/{scheduleId}', [ScheduleController::class, 'update']);
-    Route::delete('/schedules/{providerId}/{scheduleId}', [ScheduleController::class, 'destroy']);
+    Route::get('/schedules/{uuid}', [ScheduleController::class, 'show']);
+    Route::post('/schedules', [ScheduleController::class, 'store']);
+    Route::put('/schedules/{uuid}', [ScheduleController::class, 'update']);
+    Route::delete('/schedules/{uuid}', [ScheduleController::class, 'destroy']);
 
     //reservations
     Route::get('/reservations', [ReservationController::class, 'index']);
-    Route::get('/reservations/{providerId}', [ReservationController::class, 'show']);
-    Route::post('/reservations/{providerId}', [ReservationController::class, 'store']);
-    Route::put('/reservations/{providerId}/{reservationId}', [ReservationController::class, 'update']);
-    Route::delete('/reservations/{providerId}/{reservationId}', [ReservationController::class, 'destroy']);
+    Route::get('/reservations/{uuid}', [ReservationController::class, 'show']);
+    Route::post('/reservations', [ReservationController::class, 'store']);
+    Route::put('/reservations/{uuid}', [ReservationController::class, 'update']);
+    Route::delete('/reservations/{uuid}', [ReservationController::class, 'destroy']);
 });

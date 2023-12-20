@@ -2,18 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Transformers\ReservationTransformer;
+use App\Models\Provider;
 use App\Models\Reservation;
 use App\Models\Schedule;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class ReservationController extends Controller
 {
-    public function index(): Collection
+    protected ReservationTransformer $reservationTransformer;
+
+    public function __construct()
+    {
+        $this->reservationTransformer = new ReservationTransformer();
+    }
+
+    public function index(): JsonResponse
     {
 
         $user = User::where('id', Auth::user()->id)->first();
@@ -22,23 +30,27 @@ class ReservationController extends Controller
             return response()->json(['error' => 'Not Authorized'], 403);
         }
 
-        return Reservation::where('client_id', $user->client->id)->get();
+        return response()->json($this->reservationTransformer
+            ->transformMany(Reservation::where('client_id', $user->client->id)->get()));
     }
 
-    public function show(int $id): Collection
+    public function show(string $uuid): JsonResponse
     {
-        $schedules = Schedule::where('provider_id', $id)->where('filled', false)->get();
-
-        return $schedules;
+        $reservation = Reservation::where('uuid', $uuid)->first();
+        return response()->json($this->reservationTransformer
+            ->transform($reservation));
     }
 
-    public function store(Request $request, int $id): JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $request->validate([
             'slot' => 'required|string',
+            'provider' => 'required|string'
         ]);
 
         $user = User::where('id', Auth::user()->id)->first();
+
+        $provider = Provider::where('uuid', $request->input('provider'))->first();
 
         if (! $user->isClient()) {
             return response()->json(['error' => 'Not Authorized'], 403);
@@ -53,7 +65,7 @@ class ReservationController extends Controller
         }
 
         $available = Schedule::where([
-            ['provider_id', $id],
+            ['provider_id', $provider->id],
             ['filled', false],
         ])->whereTime('start_time', '<=', $slot)
             ->whereTime('end_time', '>', $slot)
@@ -74,24 +86,24 @@ class ReservationController extends Controller
         }
 
         $reservation = new Reservation([
-            'provider_id' => $id,
+            'provider_id' => $provider->id,
             'client_id' => $user->client()->first()->id,
             'reservation_slot' => $slot,
         ]);
 
         $reservation->save();
 
-        return response()->json($reservation);
+        return response()->json($this->reservationTransformer->transform($reservation));
     }
 
-    public function update(Request $request, int $providerId, int $reservationId): JsonResponse
+    public function update(Request $request, string $uuid): JsonResponse
     {
         $request->validate([
             'time' => 'required|string',
             'confirm' => 'nullable|boolean',
         ]);
 
-        $reservation = Reservation::where('id', $reservationId)->first();
+        $reservation = Reservation::where('uuid', $uuid)->first();
 
         if (! $reservation) {
             return response()->json(['error' => 'Not Found'], 404);
@@ -112,10 +124,10 @@ class ReservationController extends Controller
 
         $reservation->save();
 
-        return response()->json(['message' => 'success']);
+        return response()->json($this->reservationTransformer->transform($reservation));
     }
 
-    public function destroy(int $providerId, int $reservationId): JsonResponse
+    public function destroy(string $uuid): JsonResponse
     {
         $user = User::where('id', Auth::user()->id)->first();
 
@@ -123,7 +135,7 @@ class ReservationController extends Controller
             return response()->json(['error' => 'Not Authorized'], 403);
         }
 
-        $reservation = Reservation::where('id', $reservationId)->where('client_id', $user->client->id)->first();
+        $reservation = Reservation::where('uuid', $uuid)->where('client_id', $user->client->id)->first();
 
         if (! $reservation) {
             return response()->json(['error' => 'Not Found'], 404);

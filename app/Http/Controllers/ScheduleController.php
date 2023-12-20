@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Transformers\ScheduleTransformer;
 use App\Models\Reservation;
 use App\Models\Schedule;
 use App\Models\User;
@@ -14,39 +15,43 @@ use Illuminate\Support\Facades\Auth;
 
 class ScheduleController extends Controller
 {
-    public function index(): Collection
+    protected ScheduleTransformer $scheduleTransformer;
+
+    public function __construct()
     {
-        return Schedule::all();
+        $this->scheduleTransformer = new ScheduleTransformer();
     }
 
-    public function show(int $providerId): Collection
+    public function index(): JsonResponse
     {
-        $schedules = Schedule::where('provider_id', $providerId)->get();
+        return response()->json($this->scheduleTransformer->transformMany(Schedule::all()));
+    }
+
+    public function show(string $uuid): Collection
+    {
+        $schedule = Schedule::where('uuid', $uuid)->first();
 
         $timeSlots = new Collection();
 
-        foreach ($schedules as $schedule) {
 
-            $period = CarbonPeriod::create($schedule->start_time, '15 minutes', $schedule->end_time)
-                ->excludeEndDate();
+        $period = CarbonPeriod::create($schedule->start_time, '15 minutes', $schedule->end_time)
+            ->excludeEndDate();
 
-            foreach ($period as $date) {
-                $slot = $date->format('Y-m-d h:i A');
-                $busy = Reservation::where('reservation_slot', Carbon::parse($date)->timezone(Auth::user()->timezone)->setTimezone('UTC'))->where('provider_id', $id)->get();
+        foreach ($period as $date) {
+            $slot = $date->format('Y-m-d h:i A');
+            $busy = Reservation::where('reservation_slot', Carbon::parse($date)->timezone(Auth::user()->timezone)->setTimezone('UTC'))->where('provider_id', $id)->get();
 
-                if (! $busy->isEmpty()) {
-                    continue;
-                }
-
-                $timeSlots->add($slot);
+            if (! $busy->isEmpty()) {
+                continue;
             }
 
+            $timeSlots->add($slot);
         }
 
         return $timeSlots;
     }
 
-    public function store(Request $request, int $providerId): JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $request->validate([
             'start_time' => 'required|string|before:end_time',
@@ -71,17 +76,17 @@ class ScheduleController extends Controller
         }
 
         $schedule = new Schedule([
-            'provider_id' => $providerId,
+            'provider_id' => $user->provider()->first()->id,
             'start_time' => Carbon::parse($start_time)->timezone(Auth::user()->timezone)->setTimezone('UTC'),
             'end_time' => Carbon::parse($end_time)->timezone(Auth::user()->timezone)->setTimezone('UTC'),
         ]);
 
         $schedule->save();
 
-        return response()->json($schedule);
+        return response()->json($this->scheduleTransformer->transform($schedule));
     }
 
-    public function update(Request $request, int $providerId, int $scheduleId): JsonResponse
+    public function update(Request $request, string $uuid): JsonResponse
     {
         $request->validate([
             'start_time' => 'required|string|before:end_time',
@@ -94,7 +99,7 @@ class ScheduleController extends Controller
             return response()->json(['error' => 'Not Authorized'], 403);
         }
 
-        $schedule = Schedule::where('id', $scheduleId)->first();
+        $schedule = Schedule::where('uuid', $uuid)->first();
 
         if (! $schedule) {
             return response()->json(['error' => 'Schedule not found.'], 404);
@@ -105,10 +110,10 @@ class ScheduleController extends Controller
 
         $schedule->save();
 
-        return response()->json(['message' => 'success']);
+        return response()->json($this->scheduleTransformer->transform($schedule));
     }
 
-    public function destroy(int $providerId, int $scheduleId): JsonResponse
+    public function destroy(string $uuid): JsonResponse
     {
         $user = User::where('id', Auth::user()->id)->first();
 
@@ -116,7 +121,7 @@ class ScheduleController extends Controller
             return response()->json(['error' => 'Not Authorized'], 403);
         }
 
-        $schedule = Schedule::where('id', $scheduleId)->where('client_id', $user->provider->id)->first();
+        $schedule = Schedule::where('uuid', $uuid)->where('client_id', $user->provider->id)->first();
 
         if (! $schedule) {
             return response()->json(['error' => 'Not Found'], 404);
