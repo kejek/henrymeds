@@ -35,7 +35,7 @@ class ReservationController extends Controller
             return response()->json($this->reservationTransformer->transformMany($reservations));
         }
 
-        
+
         $user = User::where('id', Auth::user()->id)->first();
 
         if (! $user->isClient()) {
@@ -111,8 +111,8 @@ class ReservationController extends Controller
     public function update(Request $request, string $uuid): JsonResponse
     {
         $request->validate([
-            'time' => 'required|string',
-            'confirm' => 'nullable|boolean',
+            'time' => 'required_if:confirm, null|string',
+            'confirm' => 'required_if:time, null|boolean',
         ]);
 
         $reservation = Reservation::where('uuid', $uuid)->first();
@@ -128,13 +128,17 @@ class ReservationController extends Controller
             return response()->json(['error' => 'Not Found'], 404);
         }
 
-        $reservation->reservation_slot = Carbon::parse($request->slot)->timezone(Auth::user()->timezone)->setTimezone('UTC');
-
         if ($request->has('confirm') && !$reservation->confirmed ) {
             $reservation->confirmed = true;
+            $reservation->save();
         }
 
-        $reservation->save();
+        if ($request->has('time')) {
+            $reservation->reservation_slot = Carbon::parse($request->time)->timezone(Auth::user()->timezone)->setTimezone('UTC');
+
+            $reservation->save();
+        }
+        
 
         return response()->json($this->reservationTransformer->transform($reservation));
     }

@@ -93,6 +93,8 @@ If you wish to run with Herd, you can install it from [Here](https://herd.larave
 
 1. Use a put request to the route `http://henrymeds.test/api/reservations/{uuid}` to update a reservation.
     - time (format: yyy-dd-mm hh:ii:ss)
+    - confirmed (true/false)
+2. As you can see, you can confirm the reservation on updating it.
 
 ## Deleting a reservation
 
