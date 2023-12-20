@@ -21,9 +21,21 @@ class ReservationController extends Controller
         $this->reservationTransformer = new ReservationTransformer();
     }
 
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
+        if ($request->has('provider')) {
+            $request->validate([
+                'provider' => 'required|string',
+            ]);
 
+            $provider = Provider::where('uuid', $request->provider)->first();
+
+            $reservations = Reservation::where('provider_id', $provider->id)->get();
+
+            return response()->json($this->reservationTransformer->transformMany($reservations));
+        }
+
+        
         $user = User::where('id', Auth::user()->id)->first();
 
         if (! $user->isClient()) {
